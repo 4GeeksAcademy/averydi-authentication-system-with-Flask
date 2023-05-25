@@ -20,7 +20,7 @@ export const Login = () => {
                 password: password
             })
         }
-        fetch('https://3000-4geeksacade-averydiauth-ov22jhlq6xe.ws-us98.gitpod.io/api/token', opts)
+        fetch("https://3000-4geeksacade-averydiauth-ov22jhlq6xe.ws-us98.gitpod.io/api/token", opts)
             .then(resp => {
                 if (resp.status === 200) return resp.json();
                 else alert("Holy smokes there's an error!");
@@ -31,7 +31,7 @@ export const Login = () => {
             })
             .catch(error => {
                 console.error("Holy smokes there's an error!", error);
-            })
+            });
     }
 
 	return (
