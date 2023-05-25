@@ -21,28 +21,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().changeColor(0, "green");
 			},
 
-			login: async (email, password) => {
-				const opts = {
-					method: 'POST',
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						email: email,
-						password: password
-					})
-				};
-				const resp = await fetch("https://3000-4geeksacade-averydiauth-ov22jhlq6xe.ws-us98.gitpod.io/api/token", opts)
-				if (resp.status !== 200){
-					alert("Holy smokes there's an error!");
-					return false;
-				}
-				const data = await resp.json();
-				console.log("From the tailend", data);
-				sessionStorage.setItem("token", data.access_token);
-			}
-			}
-
 			getMessage: async () => {
 				try{
 					// fetching data from the backend
