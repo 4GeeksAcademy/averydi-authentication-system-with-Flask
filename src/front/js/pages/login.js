@@ -11,7 +11,7 @@ export const Login = () => {
 			<input type="password" placeholder="password"></input>
 			<button class = "btn btn-secondary mr-4">Submit</button>
 			<div className="alert alert-info">
-				{store.message || "Loading message from the backend (make sure your python backend is running)..."}
+				{store.message || "Loading from Backend..."}
 			</div>
 		</div>
 	);
