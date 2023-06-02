@@ -11,7 +11,6 @@ from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_jwt_extended import JWTManager
 
 #from models import Person
@@ -23,6 +22,13 @@ app.url_map.strict_slashes = False
 
 app.config["JWT_SECRET_KEY"] = os.environ.get('JWT_SECRET') 
 jwt = JWTManager(app)
+
+@jwt.token_in_blocklist_loader
+def check_token_blocklist(jwt_header,jwt_payload) -> bool:
+    tokenBlocked = TokenBlockedList.query.filter_by(jti=jwt_payload["jti"]).first
+    if isinstance(tokenBlocked,TokenBlockedList):
+        return True
+    else: False
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
@@ -59,9 +65,7 @@ def sitemap():
         return generate_sitemap(app)
     return send_from_directory(static_file_dir, 'index.html')
 
-@app.route('/hello', methods =['GET'])
-def hello():
-    return jsonify ('Hello')
+
 # any other endpoint will try to serve it like a static file
 @app.route('/<path:path>', methods=['GET'])
 def serve_any_other_file(path):

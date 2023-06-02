@@ -1,18 +1,63 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { Context } from "../store/appContext";
-import "../../styles/home.css";
 
-export const Login = () => {
-	const { store, actions } = useContext(Context);
+export function Login() {
+    const { store, actions } = useContext(Context);
+    const [email, setEmail] = useState(""); // Provide an initial value
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-	return (
-		<div className="text-center mt-5">
-			<input type="text" placeholder="email"></input>
-			<input type="password" placeholder="password"></input>
-			<button class = "btn btn-secondary mr-4">Submit</button>
-			<div className="alert alert-info">
-				{store.message || "Loading from Backend..."}
-			</div>
-		</div>
-	);
-};
+    console.log("This is your token: ", store.token);
+    const handleClick = () => {
+        actions.login(email, password).then(() => {
+            if (store.token && store.token !== "" && store.token !== undefined) {
+                navigate("/private");
+            }
+        });
+    }
+
+    return (
+        <div id="endPointBody">
+            {(store.token && store.token !== "" && store.token !== undefined) ?
+                "You are logged in with this token" + store.token :
+                <form>
+                    <h1 className="text-center" id='loginH1'>
+                        Log In
+                    </h1>
+                    <div className="mb-3">
+                        <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="exampleInputEmail1"
+                            aria-describedby="emailHelp"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="exampleInputPassword1"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <Link to="/private">
+                        <button className="btn btn-primary" id="btn" onClick={handleClick}>Login</button>
+                    </Link>
+                </form>
+            }
+
+            <Link to="/">
+                <button className="btn btn-primary" id="btn">Back home</button>
+            </Link>
+        </div>
+    );
+}
